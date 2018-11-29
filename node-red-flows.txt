@@ -1,0 +1,363 @@
+[
+    {
+        "id": "b19a439c.5d70e",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "7cc5e663.2ef788",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "d3613378.8bb8b",
+        "type": "wiotp-credentials",
+        "z": "",
+        "name": "",
+        "org": "n527py",
+        "serverName": "",
+        "devType": "node-red",
+        "devId": "node-device-2",
+        "keepalive": "60",
+        "cleansession": true,
+        "tls": "",
+        "usetls": false
+    },
+    {
+        "id": "9e37d232.77847",
+        "type": "inject",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "20",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "dbcb357.ae58dc8"
+            ]
+        ]
+    },
+    {
+        "id": "a6e3f2d1.729d4",
+        "type": "debug",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 810,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "be0f0d3b.1115d",
+        "type": "function",
+        "z": "b19a439c.5d70e",
+        "name": "Temperature in JSON",
+        "func": "msg.payload = {\"d\":{\"rpi_temp\":msg.payload.replace(\"temp=\",\"\").replace(\"'C\\n\",\"\")}};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 480,
+        "y": 160,
+        "wires": [
+            [
+                "a6e3f2d1.729d4",
+                "88279b50.4483c8"
+            ]
+        ]
+    },
+    {
+        "id": "dbcb357.ae58dc8",
+        "type": "exec",
+        "z": "b19a439c.5d70e",
+        "command": "vcgencmd",
+        "addpay": false,
+        "append": "measure_temp",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": true,
+        "name": "getTemp",
+        "x": 280,
+        "y": 160,
+        "wires": [
+            [
+                "be0f0d3b.1115d"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "2b82a7b8.5cd808",
+        "type": "mqtt in",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "topic": "/iotharkka",
+        "qos": "2",
+        "broker": "7cc5e663.2ef788",
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "dd79a209.98d97"
+            ]
+        ]
+    },
+    {
+        "id": "b1f6d22c.f709b",
+        "type": "debug",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 810,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b7c29443.d140e8",
+        "type": "wiotp out",
+        "z": "b19a439c.5d70e",
+        "authType": "d",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "d3613378.8bb8b",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "light_toggle",
+        "format": "json",
+        "qos": "",
+        "name": "",
+        "x": 810,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "dd79a209.98d97",
+        "type": "function",
+        "z": "b19a439c.5d70e",
+        "name": "light status in json",
+        "func": "if (msg.payload == \"light13: 1\" || msg.payload == \"13 valo päälle\") {\n        msg.payload = {\"d\":{\"light_13_status\": 1}};\n}\nelse if (msg.payload == \"light13: 0\" || msg.payload == \"13 valo pois\"){\n    msg.payload = {\"d\":{\"light_13_status\": 0}};\n}\nelse if (msg.payload == \"light5: 1\" || msg.payload == \"5 valo päälle\") {\n    msg.payload = {\"d\":{\"light_5_status\": 1}};\n}\nelse if (msg.payload == \"light5: 0\" || msg.payload == \"5 valo pois\") {\n    msg.payload = {\"d\":{\"light_5_status\": 0}};\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 470,
+        "y": 320,
+        "wires": [
+            [
+                "b1f6d22c.f709b",
+                "b7c29443.d140e8"
+            ]
+        ]
+    },
+    {
+        "id": "88279b50.4483c8",
+        "type": "wiotp out",
+        "z": "b19a439c.5d70e",
+        "authType": "d",
+        "qs": "false",
+        "qsDeviceId": "",
+        "deviceKey": "d3613378.8bb8b",
+        "deviceType": "",
+        "deviceId": "",
+        "event": "rpi_temp",
+        "format": "json",
+        "qos": "",
+        "name": "",
+        "x": 800,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "930524db.0aea88",
+        "type": "e-mail in",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "protocol": "IMAP",
+        "server": "imap.gmail.com",
+        "useSSL": true,
+        "port": "993",
+        "box": "INBOX",
+        "disposition": "Read",
+        "repeat": "30",
+        "x": 130,
+        "y": 440,
+        "wires": [
+            [
+                "dfbdc9f0.1d2ff8",
+                "6a6f4c.369990b4",
+                "3fcd9ea1.ca4f82",
+                "dd79a209.98d97"
+            ]
+        ]
+    },
+    {
+        "id": "dfbdc9f0.1d2ff8",
+        "type": "debug",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 270,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "3ba7332f.982f7c",
+        "type": "rpi-gpio out",
+        "z": "b19a439c.5d70e",
+        "name": "Light 13",
+        "pin": "33",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 800,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "8a041ec6.ae6db",
+        "type": "function",
+        "z": "b19a439c.5d70e",
+        "name": "email in I/O",
+        "func": "if (msg.payload == \"13 valo pois\") {\n    msg.payload = 0;\n}\nelse if (msg.payload == \"13 valo päälle\") {\n    msg.payload = 1;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 420,
+        "wires": [
+            [
+                "12340922.0ccc67",
+                "3ba7332f.982f7c"
+            ]
+        ]
+    },
+    {
+        "id": "12340922.0ccc67",
+        "type": "debug",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 590,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "2e5ba239.2d94fe",
+        "type": "rpi-gpio out",
+        "z": "b19a439c.5d70e",
+        "name": "Light 5",
+        "pin": "29",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 790,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "6a6f4c.369990b4",
+        "type": "switch",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "13",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 290,
+        "y": 420,
+        "wires": [
+            [
+                "8a041ec6.ae6db"
+            ]
+        ]
+    },
+    {
+        "id": "3fcd9ea1.ca4f82",
+        "type": "switch",
+        "z": "b19a439c.5d70e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "5",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 290,
+        "y": 460,
+        "wires": [
+            [
+                "4b7abc2e.20ac84"
+            ]
+        ]
+    },
+    {
+        "id": "4b7abc2e.20ac84",
+        "type": "function",
+        "z": "b19a439c.5d70e",
+        "name": "email in I/O",
+        "func": "if (msg.payload == \"5 valo pois\") {\n    msg.payload = 0;\n}\nelse if (msg.payload == \"5 valo päälle\") {\n    msg.payload = 1;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 460,
+        "wires": [
+            [
+                "2e5ba239.2d94fe",
+                "12340922.0ccc67"
+            ]
+        ]
+    }
+]
