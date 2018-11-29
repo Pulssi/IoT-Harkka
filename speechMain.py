@@ -38,13 +38,13 @@ while True:
         # For debugging purposes
         command = input("13/5 1 or 13/5 4?")
 
-        # Determine which pin to use, 13 or 5
+        # determine which pin to use, 13 or 5
         if (command in first_light_on or command in first_light_off):
             pin = 13
         elif (command in second_light_on or command in second_light_off):
             pin = 5
 
-        # Determine if command is about turning light on
+        # determine if command is about turning light on
         if (command in first_light_on or command in second_light_on):
             if(GPIO.input(pin)):
                print("That light is already on")
@@ -54,7 +54,7 @@ while True:
                 print("Light turned on!")
                 publish.publishMsg("light{}: {}".format(str(pin), str(GPIO.input(pin))))
 
-        # Determine if command is about turning light off        
+        # determine if command is about turning light off        
         elif (command in first_light_off or command in second_light_off):
             if (not GPIO.input(pin)):
                print("That light is already off")
