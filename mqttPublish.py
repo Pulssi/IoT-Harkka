@@ -1,4 +1,9 @@
-#-*- coding: utf-8 .*.
+'''
+Module for mqtt messaging. Handles all the publishing
+of received data to the mqtt broker using the
+correct topic.
+'''
+
 import paho.mqtt.client as mqtt
 import time
 

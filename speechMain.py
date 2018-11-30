@@ -1,5 +1,8 @@
-# see wiki at:
-# https://sourceforge.net/p/raspberry-gpio-python/wiki/Examples/
+'''
+Main module which runs the program and contains
+the main loop for light toggling with speech
+recognition.
+'''
 
 import RPi.GPIO as GPIO
 import time
@@ -22,8 +25,8 @@ GPIO.setup(5, GPIO.OUT)
 first_light_on = ["13 1", "13 what", "13 salon", "13 Wat", "13 who won"]
 second_light_on = ["5 1", "5 what", "5 salon", "5 Wat", "5 who won"]
 
-first_light_off = ["13 or", "13 poor", "13 4"]
-second_light_off = ["5 or", "5 poor", "5 4"]
+first_light_off = ["13 4", "13 or", "13 poor"]
+second_light_off = ["5 4", "5 or", "5 poor"]
 
 # publish the initial state of the light
 publish.publishMsg("light13: " + str(GPIO.input(13)))
@@ -34,9 +37,9 @@ while True:
     userInput = input("Type 'y' to start or 'q' to quit\n> ")
 
     if (userInput == "y"):
-        #command = stt.speechToText()
-        # For debugging purposes
-        command = input("13/5 1 or 13/5 4?")
+        command = stt.speechToText()
+        # for debugging purposes
+        #command = input("13/5 1 or 13/5 4?")
 
         # determine which pin to use, 13 or 5
         if (command in first_light_on or command in first_light_off):
@@ -49,7 +52,7 @@ while True:
             if(GPIO.input(pin)):
                print("That light is already on")
             else:
-                # set voltage high for pin 13
+                # set voltage high for the pin in use
                 GPIO.output(pin, GPIO.HIGH)
                 print("Light turned on!")
                 publish.publishMsg("light{}: {}".format(str(pin), str(GPIO.input(pin))))
@@ -59,7 +62,7 @@ while True:
             if (not GPIO.input(pin)):
                print("That light is already off")
             else:
-                # set voltage low for pin 13
+                # set voltage low for the pin in use
                 GPIO.output(pin, GPIO.LOW)
                 print("Light should be now off!")
                 publish.publishMsg("light{}: {}".format(str(pin), str(GPIO.input(pin))))
