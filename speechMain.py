@@ -22,11 +22,11 @@ GPIO.setup(13, GPIO.OUT)
 GPIO.setup(5, GPIO.OUT)
 
 # list of acceptable commands for toggling the light
-first_light_on = ["13 1", "13 what", "13 salon", "13 Wat", "13 who won"]
-second_light_on = ["5 1", "5 what", "5 salon", "5 Wat", "5 who won"]
+first_light_on = ["1", "what"]
+second_light_on = ["9"]
 
-first_light_off = ["13 4", "13 or", "13 poor"]
-second_light_off = ["5 4", "5 or", "5 poor"]
+first_light_off = ["6"]
+second_light_off = ["7"]
 
 # publish the initial state of the light
 publish.publishMsg("light13: " + str(GPIO.input(13)))
