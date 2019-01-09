@@ -10,4 +10,4 @@ Pinnien tila lähetetään MQTT-protokollalla Node-RED palveluun, jossa data muu
 
 Node-Red -palvelulla on myös pinnien ohjaamiseen toteutettu sähköpostilla toimiva ohajus. Palvelussa oleva node tarkistaa tietyn aikavälein onko määrättyyn sähköposti tiliin tullut uutta viestiä ja mikäli on niin lukee viestin sisällön ja muuttaa pinnin tilaa vastaavasti.
 
-Projektista löytyy kuvakaappauksia images -kansiosta.
+Projektista löytyy kuvakaappauksia images -kansiosta sekä toiminnallisuutta havainnollistava video videos -kansiosta.
